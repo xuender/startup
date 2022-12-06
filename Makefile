@@ -1,6 +1,7 @@
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/cespare/reflex@latest
+	go install github.com/jondot/goweight@latest
 
 test:
 	go test -race -v ./... -gcflags=all=-l
@@ -20,3 +21,6 @@ build:
 coverage:
 	go test -v -coverprofile=cover.out -covermode=atomic .
 	go tool cover -html=cover.out -o cover.html
+
+weight: tools
+	goweight

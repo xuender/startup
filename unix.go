@@ -6,8 +6,6 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
-
-	"golang.org/x/exp/slices"
 )
 
 const _crontab = "crontab"
@@ -68,16 +66,18 @@ func Remove(command string) error {
 	}
 
 	lines := bytes.Split(old, []byte{'\n'})
+	buf := bytes.Buffer{}
 
-	for index, line := range lines {
+	for _, line := range lines {
 		if bytes.Contains(line, data) {
-			lines = slices.Delete(lines, index, index+1)
-
-			break
+			continue
 		}
+
+		buf.Write(line)
+		buf.Write([]byte{'\n'})
 	}
 
-	return crontabUpdate(bytes.Join(lines, []byte{'\n'}))
+	return crontabUpdate(buf.Bytes())
 }
 
 func crontabList() ([]byte, error) {
