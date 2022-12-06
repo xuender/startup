@@ -3,6 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/xuender/startup)](https://goreportcard.com/report/github.com/xuender/startup)
 [![GoDoc](https://godoc.org/github.com/xuender/startup?status.svg)](https://pkg.go.dev/github.com/xuender/startup)
 [![GitHub license](https://img.shields.io/github/license/xuender/startup)](https://github.com/xuender/startup/blob/main/LICENSE)
+[![tag](https://img.shields.io/github/tag/xuender/startup.svg)](https://github.com/xuender/startup/releases)
 
 ✨ **`xuender/startup` is a startup Go library based on Go 1.18+ Generics.**
 
