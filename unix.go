@@ -1,4 +1,4 @@
-//go:build !windows && !darwin
+//go:build !windows
 
 package startup
 
@@ -10,19 +10,21 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const _crontab = "crontab"
+
 func Startup(command string) error {
 	if command == "" {
 		return ErrEmptyCommand
 	}
 
-	old, err := list()
+	old, err := crontabList()
 	if err != nil {
 		return err
 	}
 
 	command = fmt.Sprintf("@reboot %s\n", command)
 
-	return update(append(old, []byte(command)...))
+	return crontabUpdate(append(old, []byte(command)...))
 }
 
 func Has(command string) bool {
@@ -30,13 +32,13 @@ func Has(command string) bool {
 		return false
 	}
 
-	if _, err := exec.LookPath("crontab"); err != nil {
+	if _, err := exec.LookPath(_crontab); err != nil {
 		return false
 	}
 
 	data := []byte(command)
 
-	list, err := list()
+	list, err := crontabList()
 	if err != nil {
 		return false
 	}
@@ -57,7 +59,7 @@ func End(command string) error {
 
 	data := []byte(command)
 
-	old, err := list()
+	old, err := crontabList()
 	if err != nil {
 		return err
 	}
@@ -65,22 +67,22 @@ func End(command string) error {
 	lines := bytes.Split(old, []byte{'\n'})
 
 	for index, line := range lines {
-		if bytes.HasSuffix(line, data) {
+		if bytes.Contains(line, data) {
 			lines = slices.Delete(lines, index, index+1)
 
 			break
 		}
 	}
 
-	return update(bytes.Join(lines, []byte{'\n'}))
+	return crontabUpdate(bytes.Join(lines, []byte{'\n'}))
 }
 
-func list() ([]byte, error) {
-	if _, err := exec.LookPath("crontab"); err != nil {
+func crontabList() ([]byte, error) {
+	if _, err := exec.LookPath(_crontab); err != nil {
 		return nil, err
 	}
 
-	cmd := exec.Command("crontab", "-l")
+	cmd := exec.Command(_crontab, "-l")
 
 	data, err := cmd.CombinedOutput()
 
@@ -91,8 +93,8 @@ func list() ([]byte, error) {
 	return data, err
 }
 
-func update(data []byte) error {
-	cron := exec.Command("crontab")
+func crontabUpdate(data []byte) error {
+	cron := exec.Command(_crontab)
 
 	pipe, err := cron.StdinPipe()
 	if err != nil {

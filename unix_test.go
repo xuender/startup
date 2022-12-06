@@ -11,12 +11,14 @@ import (
 )
 
 func ExampleStartup() {
+	fmt.Println(startup.Has("echo 1"))
 	fmt.Println(startup.Startup("echo 1"))
 	fmt.Println(startup.Has("echo 1"))
 	fmt.Println(startup.End("echo 1"))
 	fmt.Println(startup.Has("echo 1"))
 
-	// output:
+	// Output:
+	// false
 	// <nil>
 	// true
 	// <nil>
