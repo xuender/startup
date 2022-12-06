@@ -16,7 +16,7 @@ func Startup(command string) error {
 		return ErrEmptyCommand
 	}
 
-	old, err := crontabList()
+	old, err := CrontabList()
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func Include(command string) bool {
 
 	data := []byte(command)
 
-	list, err := crontabList()
+	list, err := CrontabList()
 	if err != nil {
 		return false
 	}
@@ -60,7 +60,7 @@ func Remove(command string) error {
 
 	data := []byte(command)
 
-	old, err := crontabList()
+	old, err := CrontabList()
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func Remove(command string) error {
 	return crontabUpdate(buf.Bytes())
 }
 
-func crontabList() ([]byte, error) {
+func CrontabList() ([]byte, error) {
 	if _, err := exec.LookPath(_crontab); err != nil {
 		return nil, err
 	}

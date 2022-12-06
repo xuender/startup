@@ -30,8 +30,30 @@ func TestInstall_Has(t *testing.T) {
 }
 
 // nolint: paralleltest
+func TestInstall_Startup(t *testing.T) {
+	assert := assert.New(t)
+	patches := gomonkey.ApplyFunc(startup.Startup, func(file string) error {
+		return nil
+	})
+
+	defer patches.Reset()
+
+	assert.Nil(startup.Install("-d", 1))
+}
+
+// nolint: paralleltest
 func TestStatus(t *testing.T) {
 	defer monkeyLookPath().Reset()
+
+	assert.False(t, startup.Status())
+}
+
+// nolint: paralleltest
+func TestStatus_Include(t *testing.T) {
+	patches := gomonkey.ApplyFunc(startup.Include, func(file string) bool {
+		return false
+	})
+	defer patches.Reset()
 
 	assert.False(t, startup.Status())
 }
@@ -41,6 +63,18 @@ func TestUninstall(t *testing.T) {
 	defer monkeyLookPath().Reset()
 
 	assert.NotNil(t, startup.Uninstall())
+}
+
+// nolint: paralleltest
+func TestUninstall_Include(t *testing.T) {
+	assert := assert.New(t)
+	patches := gomonkey.ApplyFunc(startup.Include, func(file string) bool {
+		return true
+	})
+
+	defer patches.Reset()
+
+	assert.Nil(startup.Uninstall())
 }
 
 // nolint: paralleltest

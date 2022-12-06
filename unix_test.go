@@ -13,25 +13,32 @@ import (
 	"github.com/xuender/startup"
 )
 
+// nolint: testableexamples
 func ExampleStartup() {
 	fmt.Println(startup.Include("echo 1"))
 	fmt.Println(startup.Startup("echo 1"))
-	fmt.Println(startup.Include("echo 1"))
 	fmt.Println(startup.Remove("echo 1"))
-	fmt.Println(startup.Include("echo 1"))
-
-	// Output:
-	// false
-	// <nil>
-	// true
-	// <nil>
-	// false
 }
 
 func TestStartup(t *testing.T) {
 	t.Parallel()
 
 	assert.NotNil(t, startup.Startup(""))
+}
+
+// nolint: paralleltest
+func TestStartup_Command(t *testing.T) {
+	patches := gomonkey.ApplyFunc(startup.CrontabList, func() ([]byte, error) {
+		return []byte("echo 2\n"), nil
+	})
+	patches2 := gomonkey.ApplyFunc(exec.Command, func(name string, args ...string) *exec.Cmd {
+		return &exec.Cmd{Stdout: os.Stdout}
+	})
+
+	defer patches.Reset()
+	defer patches2.Reset()
+
+	assert.NotNil(t, startup.Startup("echo 1"))
 }
 
 // nolint: paralleltest
@@ -66,6 +73,17 @@ func TestInclude_Command(t *testing.T) {
 	defer patches.Reset()
 
 	assert.False(t, startup.Include("arg"))
+}
+
+// nolint: paralleltest
+func TestInclude_True(t *testing.T) {
+	patches := gomonkey.ApplyFunc(startup.CrontabList, func() ([]byte, error) {
+		return []byte("echo 1\n"), nil
+	})
+
+	defer patches.Reset()
+
+	assert.True(t, startup.Include("echo"))
 }
 
 func TestRemove(t *testing.T) {
