@@ -51,10 +51,10 @@ func Uninstall() error {
 
 // CommandPath returns command path.
 func CommandPath() (string, error) {
-	path, err := filepath.Abs(os.Args[0])
+	path, err := exec.LookPath(os.Args[0])
 	if err != nil {
 		return path, err
 	}
 
-	return exec.LookPath(path)
+	return filepath.Abs(path)
 }
