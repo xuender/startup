@@ -98,3 +98,18 @@ func TestRemove_LookPath(t *testing.T) {
 
 	assert.NotNil(t, startup.Remove("arg"))
 }
+
+// nolint: paralleltest
+func TestRemove_CrontabList(t *testing.T) {
+	patches := gomonkey.ApplyFunc(startup.CrontabList, func() ([]byte, error) {
+		return []byte("echo 1\ndata\n"), nil
+	})
+	patches2 := gomonkey.ApplyFunc(startup.CrontabUpdate, func([]byte) error {
+		return nil
+	})
+
+	defer patches.Reset()
+	defer patches2.Reset()
+
+	assert.Nil(t, startup.Remove("echo"))
+}

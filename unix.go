@@ -23,7 +23,7 @@ func Startup(command string) error {
 
 	command = fmt.Sprintf("@reboot %s\n", command)
 
-	return crontabUpdate(append(old, []byte(command)...))
+	return CrontabUpdate(append(old, []byte(command)...))
 }
 
 // Include command.
@@ -77,7 +77,7 @@ func Remove(command string) error {
 		buf.Write([]byte{'\n'})
 	}
 
-	return crontabUpdate(buf.Bytes())
+	return CrontabUpdate(buf.Bytes())
 }
 
 func CrontabList() ([]byte, error) {
@@ -96,7 +96,7 @@ func CrontabList() ([]byte, error) {
 	return data, err
 }
 
-func crontabUpdate(data []byte) error {
+func CrontabUpdate(data []byte) error {
 	cron := exec.Command(_crontab)
 
 	pipe, err := cron.StdinPipe()
