@@ -71,8 +71,12 @@ func TestUninstall_Include(t *testing.T) {
 	patches := gomonkey.ApplyFunc(startup.Include, func(file string) bool {
 		return true
 	})
+	patches2 := gomonkey.ApplyFunc(startup.Remove, func(file string) error {
+		return nil
+	})
 
 	defer patches.Reset()
+	defer patches2.Reset()
 
 	assert.Nil(startup.Uninstall())
 }
