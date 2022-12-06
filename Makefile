@@ -6,7 +6,7 @@ test:
 	go test -race -v ./... -gcflags=all=-l
 
 watch-test:
-	reflex -t 50ms -s -- sh -c 'gotest -v ./...'
+	reflex -t 50ms -s -- sh -c 'gotest -v ./... -gcflags=all=-l'
 
 lint:
 	golangci-lint run --timeout 60s --max-same-issues 50 ./...
