@@ -34,7 +34,7 @@ func main() {
 		if startup.Status() {
 			fmt.Fprintln(os.Stdout, "Flag example is install.")
 		} else {
-			fmt.Fprintln(os.Stdout, "Flag example is uninstall.")
+			fmt.Fprintln(os.Stdout, "Flag example is not install.")
 		}
 	case *daemon:
 		fmt.Fprintln(os.Stdout, "Flag example daemon...")

@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 // Install startup.
 func Install(args ...any) error {
-	command, err := exec.LookPath(os.Args[0])
+	command, err := CommandPath()
 	if err != nil {
 		return err
 	}
@@ -26,7 +27,7 @@ func Install(args ...any) error {
 
 // Status by install.
 func Status() bool {
-	command, err := exec.LookPath(os.Args[0])
+	command, err := CommandPath()
 	if err != nil {
 		return false
 	}
@@ -36,7 +37,7 @@ func Status() bool {
 
 // Uninstall startup.
 func Uninstall() error {
-	command, err := exec.LookPath(os.Args[0])
+	command, err := CommandPath()
 	if err != nil {
 		return err
 	}
@@ -46,4 +47,14 @@ func Uninstall() error {
 	}
 
 	return Remove(command)
+}
+
+// CommandPath returns command path.
+func CommandPath() (string, error) {
+	path, err := filepath.Abs(os.Args[0])
+	if err != nil {
+		return path, err
+	}
+
+	return exec.LookPath(path)
 }

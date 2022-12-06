@@ -2,6 +2,7 @@ package startup_test
 
 import (
 	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/agiledragon/gomonkey/v2"
@@ -58,4 +59,26 @@ func monkeyLookPath() *gomonkey.Patches {
 	return gomonkey.ApplyFunc(exec.LookPath, func(file string) (string, error) {
 		return "file", startup.ErrEmptyCommand
 	})
+}
+
+func TestCommandPath(t *testing.T) {
+	t.Parallel()
+
+	assert := assert.New(t)
+	path, err := startup.CommandPath()
+
+	assert.Nil(err)
+	assert.NotNil(path)
+}
+
+// nolint: paralleltest
+func TestCommandPath_Abs(t *testing.T) {
+	patches := gomonkey.ApplyFunc(filepath.Abs, func(file string) (string, error) {
+		return "", startup.ErrEmptyCommand
+	})
+	defer patches.Reset()
+
+	_, err := startup.CommandPath()
+
+	assert.NotNil(t, err)
 }

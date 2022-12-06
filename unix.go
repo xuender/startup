@@ -69,7 +69,7 @@ func Remove(command string) error {
 	buf := bytes.Buffer{}
 
 	for _, line := range lines {
-		if bytes.Contains(line, data) {
+		if bytes.Contains(line, data) || len(line) == 0 {
 			continue
 		}
 

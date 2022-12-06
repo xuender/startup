@@ -24,3 +24,7 @@ coverage:
 
 weight: tools
 	goweight
+
+build-example:
+	CGO_ENABLED=0 GOOS=linux go build -o dist/flag _example/flag/main.go
+	CGO_ENABLED=0 GOOS=windows go build -o dist/flag.exe _example/flag/main.go

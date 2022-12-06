@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/agiledragon/gomonkey/v2 v2.9.0
 	github.com/stretchr/testify v1.8.1
+	golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a
 )
 
 require (
