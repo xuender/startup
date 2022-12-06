@@ -8,8 +8,6 @@
 
 ✨ **`xuender/startup` is a startup Go library based on Go 1.18+ Generics.**
 
-![codecov](https://codecov.io/gh/xuender/startup/branch/main/graphs/tree.svg?token=WHAOPUYKCM)
-
 ## 🚀 Install
 
 ```sh
@@ -51,6 +49,10 @@ startup.Status()
 
 // true or false
 ```
+
+## 😁 Cover
+
+![codecov](https://codecov.io/gh/xuender/startup/branch/main/graphs/tree.svg?token=WHAOPUYKCM)
 
 ## 📝 License
 
