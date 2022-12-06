@@ -12,6 +12,7 @@ import (
 
 const _crontab = "crontab"
 
+// Startup set command auto start.
 func Startup(command string) error {
 	if command == "" {
 		return ErrEmptyCommand
@@ -27,7 +28,8 @@ func Startup(command string) error {
 	return crontabUpdate(append(old, []byte(command)...))
 }
 
-func Has(command string) bool {
+// Include command.
+func Include(command string) bool {
 	if command == "" {
 		return false
 	}
@@ -52,7 +54,8 @@ func Has(command string) bool {
 	return false
 }
 
-func End(command string) error {
+// Remove command.
+func Remove(command string) error {
 	if command == "" {
 		return ErrEmptyCommand
 	}

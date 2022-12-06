@@ -6,13 +6,14 @@ import (
 	"os/exec"
 )
 
+// Install startup.
 func Install(args ...any) error {
 	command, err := exec.LookPath(os.Args[0])
 	if err != nil {
 		return err
 	}
 
-	if Has(command) {
+	if Include(command) {
 		return nil
 	}
 
@@ -23,24 +24,26 @@ func Install(args ...any) error {
 	return Startup(command)
 }
 
+// Status by install.
 func Status() bool {
 	command, err := exec.LookPath(os.Args[0])
 	if err != nil {
 		return false
 	}
 
-	return Has(command)
+	return Include(command)
 }
 
+// Uninstall startup.
 func Uninstall() error {
 	command, err := exec.LookPath(os.Args[0])
 	if err != nil {
 		return err
 	}
 
-	if !Has(command) {
+	if !Include(command) {
 		return nil
 	}
 
-	return End(command)
+	return Remove(command)
 }

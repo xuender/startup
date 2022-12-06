@@ -19,7 +19,7 @@ func TestInstall(t *testing.T) {
 // nolint: paralleltest
 func TestInstall_Has(t *testing.T) {
 	assert := assert.New(t)
-	patches := gomonkey.ApplyFunc(startup.Has, func(file string) bool {
+	patches := gomonkey.ApplyFunc(startup.Include, func(file string) bool {
 		return true
 	})
 
@@ -45,7 +45,7 @@ func TestUninstall(t *testing.T) {
 // nolint: paralleltest
 func TestUninstall_Has(t *testing.T) {
 	assert := assert.New(t)
-	patches := gomonkey.ApplyFunc(startup.Has, func(file string) bool {
+	patches := gomonkey.ApplyFunc(startup.Include, func(file string) bool {
 		return false
 	})
 

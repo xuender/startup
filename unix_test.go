@@ -14,11 +14,11 @@ import (
 )
 
 func ExampleStartup() {
-	fmt.Println(startup.Has("echo 1"))
+	fmt.Println(startup.Include("echo 1"))
 	fmt.Println(startup.Startup("echo 1"))
-	fmt.Println(startup.Has("echo 1"))
-	fmt.Println(startup.End("echo 1"))
-	fmt.Println(startup.Has("echo 1"))
+	fmt.Println(startup.Include("echo 1"))
+	fmt.Println(startup.Remove("echo 1"))
+	fmt.Println(startup.Include("echo 1"))
 
 	// Output:
 	// false
@@ -41,42 +41,42 @@ func TestStartup_LookPath(t *testing.T) {
 	assert.NotNil(t, startup.Startup("arg"))
 }
 
-func TestHas(t *testing.T) {
+func TestInclude(t *testing.T) {
 	t.Parallel()
 
 	assert := assert.New(t)
 
-	assert.False(startup.Has(""))
-	assert.False(startup.Has("test"))
+	assert.False(startup.Include(""))
+	assert.False(startup.Include("test"))
 }
 
 // nolint: paralleltest
-func TestHas_LookPath(t *testing.T) {
+func TestInclude_LookPath(t *testing.T) {
 	defer monkeyLookPath().Reset()
 
-	assert.False(t, startup.Has("arg"))
+	assert.False(t, startup.Include("arg"))
 }
 
 // nolint: paralleltest
-func TestHas_Command(t *testing.T) {
+func TestInclude_Command(t *testing.T) {
 	patches := gomonkey.ApplyFunc(exec.Command, func(name string, args ...string) *exec.Cmd {
 		return &exec.Cmd{Stdout: os.Stdout}
 	})
 
 	defer patches.Reset()
 
-	assert.False(t, startup.Has("arg"))
+	assert.False(t, startup.Include("arg"))
 }
 
-func TestEnd(t *testing.T) {
+func TestRemove(t *testing.T) {
 	t.Parallel()
 
-	assert.NotNil(t, startup.End(""))
+	assert.NotNil(t, startup.Remove(""))
 }
 
 // nolint: paralleltest
-func TestEnd_LookPath(t *testing.T) {
+func TestRemove_LookPath(t *testing.T) {
 	defer monkeyLookPath().Reset()
 
-	assert.NotNil(t, startup.End("arg"))
+	assert.NotNil(t, startup.Remove("arg"))
 }
