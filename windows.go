@@ -11,12 +11,14 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
+const _key = `Software\Microsoft\Windows\CurrentVersion\Run`
+
 func Startup(command string) error {
 	if command == "" {
 		return ErrEmptyCommand
 	}
 
-	key, _, err := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.ALL_ACCESS)
+	key, _, err := registry.CreateKey(registry.CURRENT_USER, _key, registry.ALL_ACCESS)
 	if err != nil {
 		return err
 	}
@@ -56,7 +58,7 @@ func GetValue(command string) string {
 }
 
 func Include(command string) bool {
-	key, _, err := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.ALL_ACCESS)
+	key, _, err := registry.CreateKey(registry.CURRENT_USER, _key, registry.ALL_ACCESS)
 	if err != nil {
 		return false
 	}
@@ -79,7 +81,7 @@ func Include(command string) bool {
 }
 
 func Remove(command string) error {
-	key, _, err := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.ALL_ACCESS)
+	key, _, err := registry.CreateKey(registry.CURRENT_USER, _key, registry.ALL_ACCESS)
 	if err != nil {
 		return err
 	}
